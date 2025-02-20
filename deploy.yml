@@ -1,0 +1,24 @@
+---
+- name: Deploy Calculator Application
+  hosts: localhost
+  remote_user: gitika
+  become: false
+
+  tasks:
+    - name: Pull Docker Image from Docker Hub
+      docker_image:
+        name: "iiitb/calculator"
+        source: pull
+      register: docker_pull_result
+
+    - name: Display Docker Pull Result
+      debug:
+        var: docker_pull_result
+
+    - name: Start Docker Service
+      service:
+        name: docker
+        state: started
+
+    - name: Running Calculator Container
+      shell: docker run -it -d --name calculator iiitb/calculator
